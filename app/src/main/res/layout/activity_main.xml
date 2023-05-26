@@ -7,75 +7,26 @@
     android:id="@+id/constraint_layout"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ninja400"
-        app:layout_constraintBottom_toTopOf="@+id/filter"
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tintMode="multiply" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/filter"
-        android:layout_width="wrap_content"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_bar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Filter 1"
-        app:layout_constraintBottom_toTopOf="@+id/add_text_button"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/filter2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filter 2"
-        app:layout_constraintBottom_toTopOf="@+id/add_text_button"
-        app:layout_constraintStart_toEndOf="@+id/filter" />
-
-    <Button
-        android:id="@+id/filter3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filter 3"
-        app:layout_constraintBottom_toTopOf="@+id/add_text_button"
-        app:layout_constraintStart_toEndOf="@+id/filter2" />
-
-    <Button
-        android:id="@+id/filter4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filter 4"
-        app:layout_constraintBottom_toBottomOf="@+id/filter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/filter3" />
-
-
-    <Button
-        android:id="@+id/add_text_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add text"
-        app:layout_constraintBottom_toTopOf="@+id/test_upload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/test_upload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test Upload"
+        app:backgroundTint="@color/white"
+        app:menu="@menu/menu_bottom_navigation"
+        app:itemIconTint="?attr/colorPrimary"
+        app:itemTextColor="?attr/colorPrimary"
+        app:itemRippleColor="#90ee02"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/cache_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="cache"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
