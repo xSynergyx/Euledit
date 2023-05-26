@@ -31,3 +31,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Test image
+app/src/main/res/drawable/ninja400.jpg
