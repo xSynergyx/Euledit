@@ -18,12 +18,19 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.ImageViewCompat
 import com.example.euledit.ImageURL
 import com.example.euledit.R
+import com.example.euledit.UploadRequest
+import com.google.gson.JsonElement
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -36,25 +43,24 @@ import java.io.FileOutputStream
 
 class DashboardFragment : Fragment() {
 
-    // retrofit instance
-    val retrofit = Retrofit.Builder()
+    // Retrofit instance
+    private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl("https://eulerity-hackathon.appspot.com")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     interface ImagePostApi {
         @Multipart
-        @POST("upload")
-        fun uploadImage(@Part image: MultipartBody.Part)//: Call<YourResponseModel>
+        @POST("/upload")
+        fun uploadImage(@Part("image") uploadRequest: UploadRequest): Call<JsonElement>
     }
-
-    val imagePostApi = retrofit.create(ImagePostApi::class.java)
 
     interface UrlApi {
         @GET("/upload")
         suspend fun getImageUrl() : Response<ImageURL>
     }
 
+    private val imagePostApi = retrofit.create(ImagePostApi::class.java)
     private val urlApi: UrlApi = retrofit.create(UrlApi::class.java)
 
 
@@ -113,7 +119,7 @@ class DashboardFragment : Fragment() {
                 )
         }
 
-        //reset image
+        // Reset image
         motorcycleIV.setOnClickListener {
             ImageViewCompat.setImageTintList(
                 motorcycleIV,
@@ -155,7 +161,7 @@ class DashboardFragment : Fragment() {
             fileOutputStream.close()
 
             val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-            val imageBody = MultipartBody.Part.createFormData("image", file.name, requestFile)
+            val imageBody = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
             // Get the image URL
             imageUrlQuery(imageBody)
@@ -178,28 +184,38 @@ class DashboardFragment : Fragment() {
     private fun imageUrlQuery(imageBody: MultipartBody.Part) = runBlocking {
         // Launching a new coroutine
         GlobalScope.launch {
+            var originalUrl = ""
             val result = urlApi.getImageUrl()
-            Log.d("URL ", result.body().toString())
+            result.body()?.let {
+                Log.d("URL ", it.url)
+                originalUrl = it.url
+            }
             //Post request for image
-            uploadQuery(imageBody)
+            uploadQuery(imageBody, originalUrl)
         }
 
     }
 
-    private fun uploadQuery(imageBody: MultipartBody.Part) = runBlocking {
+    private fun uploadQuery(imageBody: MultipartBody.Part, original: String) = runBlocking {
 
         Log.d("MainActivity", "Made it to the upload query part")
-        /*
-        val call = imagePostApi.uploadImage(imageBody)
-        call.enqueue(object : Callback<YourResponseModel> {
-            override fun onResponse(call: Call<YourResponseModel>, response: Response<YourResponseModel>) {
-                // Handle success response
+
+        Log.d("MainActivity", original)
+
+        val appid = "christianmedina121@hotmail.com".toRequestBody("text/plain".toMediaTypeOrNull())
+        val original = original.toRequestBody("text/plain".toMediaTypeOrNull())
+
+        val uploadRequest = UploadRequest(appid, original, imageBody)
+        val call = imagePostApi.uploadImage(uploadRequest)
+        call.enqueue(object : Callback<JsonElement> {
+            override fun onResponse(call: Call<JsonElement>, response: Response<JsonElement>) {
+                Log.d("Response", response.toString())
             }
 
-            override fun onFailure(call: Call<YourResponseModel>, t: Throwable) {
-                // Handle failure
+            override fun onFailure(call: Call<JsonElement>, t: Throwable) {
+                Log.d("Failure", t.toString())
             }
-        })*/
+        })
     }
 
     private fun getBitmapFromView(view: View): Bitmap {
