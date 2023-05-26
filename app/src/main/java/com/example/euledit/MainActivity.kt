@@ -142,8 +142,8 @@ class MainActivity : AppCompatActivity() {
             fileOutputStream.flush()
             fileOutputStream.close()
 
-            val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file)
-            val imageBody = MultipartBody.Part.createFormData("image", file.name, requestFile)
+            //val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file)
+            //val imageBody = MultipartBody.Part.createFormData("image", file.name, requestFile)
 
             // Get the image URL
             imageUrlQuery()
