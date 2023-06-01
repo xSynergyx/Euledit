@@ -1,10 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Euledit" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Euledit" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">#46c286</item>
-        <item name="colorPrimaryDark">#009559</item>
-        <item name="colorPrimaryVariant">#4682c2</item>
+        <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorTertiary">#4682c2</item>
 
